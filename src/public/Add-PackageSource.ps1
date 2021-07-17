@@ -23,8 +23,8 @@ function Add-PackageSource {
 	$packageSource = @{
 		Name = $Name
 		Location = $Location.TrimEnd("\")
-		Trusted=$Trusted
-		Registered= $true
+		Trusted = $Trusted
+		Registered = $true
 	}
 
 	New-PackageSource @packageSource

@@ -19,9 +19,6 @@ function Get-InstalledPackage {
 		$MaximumVersion
 	)
 
-	# Throw an error if provided version arguments don't make sense
-	Confirm-VersionParameter -Name $Name -MinimumVersion $MinimumVersion -MaximumVersion $MaximumVersion -RequiredVersion $RequiredVersion
-
 	# If a user wants to check whether the latest version is installed, first check the repo for what the latest version is
 	if ($RequiredVersion -eq 'latest') {
 		$sid = Find-ChocoPackage -Name $Name
@@ -34,13 +31,12 @@ function Get-InstalledPackage {
 	}
 
 	# If a user provides a name without a wildcard, include it in the search
-	if ($Name -and -not (Test-WildcardPattern -Name $Name)) {
+	if ($Name -and -not ([WildcardPattern]::ContainsWildcardCharacters($Name))) {
 		$chocoParams.Add('Name',$Name)
 	}
 
 	# Return the result without additional evaluation, even if empty, to let PackageManagement handle error management
 	# Will only terminate if Choco fails to call choco.exe
-	Foil\Get-ChocoPackage @chocoParams | ConvertTo-SoftwareIdentity -Name $Name |
-		Where-Object {-not $Name -or (Test-PackageName -Name $_.Name -RequestedName $Name)} |
-			Where-Object {Test-PackageVersion -Package $_ -RequiredVersion $RequiredVersion -MinimumVersion $MinimumVersion -MaximumVersion $MaximumVersion}
+	Foil\Get-ChocoPackage @chocoParams | ConvertTo-SoftwareIdentity |
+		Where-Object {Test-PackageVersion -Package $_ -RequiredVersion $RequiredVersion -MinimumVersion $MinimumVersion -MaximumVersion $MaximumVersion}
 }
