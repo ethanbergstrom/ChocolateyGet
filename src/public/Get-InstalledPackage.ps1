@@ -41,11 +41,6 @@ function Get-InstalledPackage {
 	# Will only terminate if Choco fails to call choco.exe
 	# Would prefer to express this with ternary operators, but that's not supported with PowerShell 5.1
 	Foil\Get-ChocoPackage @chocoParams | ConvertTo-SoftwareIdentity |
-		Where-Object {
-			if ($Name) {
-				$_.Name -Like $Name
-			} else {
-				$true
-			}
-		} | Where-Object {Test-PackageVersion -Package $_ -RequiredVersion $RequiredVersion -MinimumVersion $MinimumVersion -MaximumVersion $MaximumVersion}
+		Where-Object {-Not $Name -or ($_.Name -Like $Name)} |
+			Where-Object {Test-PackageVersion -Package $_ -RequiredVersion $RequiredVersion -MinimumVersion $MinimumVersion -MaximumVersion $MaximumVersion}
 }
