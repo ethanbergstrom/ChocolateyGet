@@ -67,7 +67,7 @@ function Find-ChocoPackage {
 		$chocoParams.Add('AllVersions',$true)
 	}
 
-	if (-not ($env:CHOCO_NONEXACT_SEARCH -or [WildcardPattern]::ContainsWildcardCharacters($Name))) {
+	if (-not (($env:CHOCO_NONEXACT_SEARCH) -or ([WildcardPattern]::ContainsWildcardCharacters($Name)))) {
 		# Limit NuGet result set to just the specific package name if version is specified
 		# Have to keep choco pinned to 0.10.13 due to https://github.com/chocolatey/choco/issues/1843 - should be fixed in 0.10.16, which is still in beta
 		$chocoParams.Add('Exact',$true)
