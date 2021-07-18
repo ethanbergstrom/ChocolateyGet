@@ -38,3 +38,4 @@ function Test-PackageVersion {
 		$version | Where-Object {-Not $MinimumVersion -or ($_ -ge [System.Version]$MinimumVersion)} |
 			Where-Object {-Not $MaximumVersion -or ($_ -le [System.Version]$MaximumVersion)}
 	)
+}
