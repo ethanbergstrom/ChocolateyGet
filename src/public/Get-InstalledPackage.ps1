@@ -22,8 +22,8 @@ function Get-InstalledPackage {
 
 	# If a user wants to check whether the latest version is installed, first check the repo for what the latest version is
 	if ($RequiredVersion -eq 'latest') {
-		$sid = Find-ChocoPackage -Name $Name
-		$RequiredVersion = $sid.Version
+		$swid = Find-ChocoPackage -Name $Name
+		$RequiredVersion = $swid.Version
 	}
 
 	$chocoParams = @{
@@ -32,12 +32,20 @@ function Get-InstalledPackage {
 	}
 
 	# If a user provides a name without a wildcard, include it in the search
+	# This provides wildcard search behavior for locally installed packages, which Chocolatey lacks
 	if ($Name -and -not ([WildcardPattern]::ContainsWildcardCharacters($Name))) {
 		$chocoParams.Add('Name',$Name)
 	}
 
 	# Return the result without additional evaluation, even if empty, to let PackageManagement handle error management
 	# Will only terminate if Choco fails to call choco.exe
+	# Would prefer to express this with ternary operators, but that's not supported with PowerShell 5.1
 	Foil\Get-ChocoPackage @chocoParams | ConvertTo-SoftwareIdentity |
-		Where-Object {Test-PackageVersion -Package $_ -RequiredVersion $RequiredVersion -MinimumVersion $MinimumVersion -MaximumVersion $MaximumVersion}
+		Where-Object {
+			if ($Name) {
+				$_.Name -Like $Name
+			} else {
+				$true
+			}
+		} | Where-Object {Test-PackageVersion -Package $_ -RequiredVersion $RequiredVersion -MinimumVersion $MinimumVersion -MaximumVersion $MaximumVersion}
 }

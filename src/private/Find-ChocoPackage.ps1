@@ -4,12 +4,15 @@ function Find-ChocoPackage {
 		[string]
 		$Name,
 
+		[Parameter()]
 		[string]
 		$RequiredVersion,
 
+		[Parameter()]
 		[string]
 		$MinimumVersion,
 
+		[Parameter()]
 		[string]
 		$MaximumVersion
 	)

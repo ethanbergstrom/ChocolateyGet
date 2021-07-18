@@ -11,6 +11,7 @@ function Add-PackageSource {
 		[string]
 		$Location,
 
+		[Parameter()]
 		[bool]
 		$Trusted
 	)

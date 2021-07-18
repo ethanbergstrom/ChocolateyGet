@@ -8,6 +8,7 @@ function Install-Package {
 		[string]
 		$FastPackageReference,
 
+		[Parameter()]
 		[string]
 		$AdditionalArgs = ($request.Options[$script:AdditionalArguments])
 	)

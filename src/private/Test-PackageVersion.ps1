@@ -33,13 +33,18 @@ function Test-PackageVersion {
 	}
 
 	# Conditional filtering of the version based on optional minimum and maximum version requirements
+	# Would prefer to express this with ternary operators, but that's not supported with PowerShell 5.1
 	$null -ne ($version | Where-Object {
 		if ($MinimumVersion) {
 			$_ -ge [System.Version]$MinimumVersion
+		} else {
+			$true
 		}
-	} | Where-Object {
+	} |	Where-Object {
 		if ($MaximumVersion) {
 			$_ -le [System.Version]$MaximumVersion
+		} else {
+			$true
 		}
 	})
 }
