@@ -40,7 +40,7 @@ function Test-PackageVersion {
 		} else {
 			$true
 		}
-	} |	Where-Object {
+	} | Where-Object {
 		if ($MaximumVersion) {
 			$_ -le [System.Version]$MaximumVersion
 		} else {
