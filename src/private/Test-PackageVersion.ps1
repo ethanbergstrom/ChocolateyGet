@@ -33,7 +33,7 @@ function Test-PackageVersion {
 	}
 
 	# Conditional filtering of the version based on optional minimum and maximum version requirements
-	$version | Where-Object {
+	$null -ne ($version | Where-Object {
 		if ($MinimumVersion) {
 			$_ -ge [System.Version]$MinimumVersion
 		}
@@ -41,5 +41,5 @@ function Test-PackageVersion {
 		if ($MaximumVersion) {
 			$_ -le [System.Version]$MaximumVersion
 		}
-	}
+	})
 }

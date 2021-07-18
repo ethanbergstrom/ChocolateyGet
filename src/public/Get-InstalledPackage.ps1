@@ -1,5 +1,6 @@
 # Returns the packages that are installed.
 function Get-InstalledPackage {
+	[Diagnostics.CodeAnalysis.SuppressMessageAttribute('PSReviewUnusedParameter', '', Justification='Version may not always be used, but are still required')]
 	[CmdletBinding()]
 	param (
 		[Parameter()]
